@@ -20,6 +20,7 @@ if(jQuery)( function($) {
         contextMenu: function(o, callback) {
             // Defaults
             if( o.menu == undefined ) return false;
+            if( o.menuCssName == undefined ) o.menuCssName = 'contextMenu';
             if( o.inSpeed == undefined ) o.inSpeed = 150;
             if( o.outSpeed == undefined ) o.outSpeed = 75;
             // 0 needs to be -1 for expected results (no fade)
@@ -30,7 +31,7 @@ if(jQuery)( function($) {
                 var el = $(this);
                 var offset = $(el).offset();
                 // Add contextMenu class
-                $('#' + o.menu).addClass('contextMenu');
+                $('#' + o.menu).addClass(o.menuCssName);
                 // Simulate a true right click
                 $(this).mousedown( function(e) {
                     var evt = e;
@@ -39,7 +40,7 @@ if(jQuery)( function($) {
                         $(this).unbind('mouseup');
                         if( evt.button == 2 ) {
                             // Hide context menus that may be showing
-                            $(".contextMenu").hide();
+                            $("." + o.menuCssName).hide();
                             // Get this context menu
                             var menu = $('#' + o.menu);
 
@@ -110,7 +111,7 @@ if(jQuery)( function($) {
                             $('#' + o.menu).find('A').unbind('click');
                             $('#' + o.menu).find('LI:not(.disabled) A').click( function() {
                                 $(document).unbind('click').unbind('keypress');
-                                $(".contextMenu").hide();
+                                $("." + o.menuCssName).hide();
                                 // Callback
                                 if( callback ) callback( $(this).attr('href').substr(1), $(srcElement), {x: x - offset.left, y: y - offset.top, docX: x, docY: y} );
                                 return false;
@@ -137,7 +138,7 @@ if(jQuery)( function($) {
                     $('#' + o.menu).each(function() { $(this).bind('mousedown.disableTextSelect', function() { return false; }); });
                 }
                 // Disable browser context menu (requires both selectors to work in IE/Safari + FF/Chrome)
-                $(el).add('UL.contextMenu').bind('contextmenu', function() { return false; });
+                $(el).add('UL.' + o.menuCssName).bind('contextmenu', function() { return false; });
 
             });
             return $(this);
